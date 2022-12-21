@@ -17,13 +17,20 @@
     body { max-width: 40em; margin: auto; font-size: 18px; font-family: 'Open Sans', sans-serif; text-align: center; background: #f8f8f8; color: #222222; padding: 10px; }
     h1 { font-family: 'Raleway', sans-serif; }
     textarea { font-family: inherit; font-size: 18px; margin-top: 1em; padding: 0.5em; width: 100%; }
+    textarea.derani-pua { font-family: Derani; }
     .soa { text-align: start; }
     .soa p.ex { margin-inline-start: 4em; text-indent: 20px; }
     .soa kbd {
         font-family: 'Monaco', 'Consolas', 'DejaVu Sans Mono', monospace;
         background: rgba(0,0,0,0.1); padding: 1px 4px; border-radius: 4px; }
     .soa samp { font-family: inherit; font-weight: bold; color: #197A92; }
+
+    @font-face {
+      src: url("https://github.com/toaq/fonts/releases/download/latest/Derani.woff2") format(woff2);
+      font-family: Derani;
+    }
   </style>
+  <script src="./latin-to-derani.js"></script>
   <script>
 const d2 = '\u0301';
 const d3 = '\u0308';
@@ -193,6 +200,7 @@ window.addEventListener('DOMContentLoaded', (_) => {
 
     for (const key of [...e.data ?? ""]) {
       const previous = buf[buf.length - 1] || "";
+      const previousLength = buf.length;
       const previousWasLetter = /\p{L}/iu.test(previous);
 
       // Attach underdot.
@@ -221,6 +229,12 @@ window.addEventListener('DOMContentLoaded', (_) => {
       }
     }
 
+    const script = document.getElementById('select-writing-system').selectedOptions[0].value;
+    if(script == 'derani-pua') {
+      const splittingPoint = buf.lastIndexOf(' ');
+      buf = latinToDerani(buf.substring(0, splittingPoint)) + buf.substring(splittingPoint);
+    }
+
     kai.value = buf + post;
     kai.selectionStart = kai.selectionEnd = buf.length;
     localStorage.setItem('kai', kai.value);
@@ -231,6 +245,14 @@ window.addEventListener('DOMContentLoaded', (_) => {
 <body>
   <h1>mı Kaıchuo</h1>
   <div class="soa">
+    <p>
+      <label for="writing-system">Writing system:</label>
+      <select id="select-writing-system" name="writing-system"
+              onchange="document.getElementById('kai').className = this.selectedOptions[0].value">
+        <option value="latin" selected>Latin</option>
+        <option value="derani-pua">Deranı (PUA)</option>
+      </select>
+    </p>
     <details>
       <summary id="help-summary">Help</summary>
       <p>This is a tool for writing <a href="https://toaq.net">Toaq</a> on an everyday keyboard.</p>
