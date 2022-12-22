@@ -32,6 +32,7 @@
   </style>
   <script src="./latin-to-derani.js"></script>
   <script>
+const d1 = '';
 const d2 = '\u0301';
 const d3 = '\u0308';
 const d4 = '\u0302';
@@ -58,77 +59,19 @@ const compose = new Map([
 ]);
 
 const wordTones = new Map([
-
-  // personal pronouns
-  ["jı", d2],
-  ["suq", d2],
-  ["suna", d2],
-  ["nhao", d2],
-  ["nhana", d2],
-  ["umo", d2],
-  ["ıme", d2],
-  ["suho", d2],
-  ["ama", d2],
-
-  // anaphoric pronouns
-  ["ho", d2],
-  ["hoq", d2],
-  ["maq", d2],
-  ["ta", d2],
-  ["aq", d2],
-  ["cheq", d2],
-
-  // other pronouns
-  ["hoa", d2],
-  ["ha", d2],
-  ["mı", d2],
-
-  // illocutions
-  ["moq", d2],
-
-  // focus prefixes
-  ["ku", d2],
-  ["beı", d2],
-  ["to", d2],
-  ["mao", d2],
-  ["juaq", d2],
-
-  // quantifiers
-  ["sa", d2],
-  ["tu", d2],
-  ["tuq", d2],
-  ["sıa", d2],
-  ["nı", d2],
-  ["baq", d2],
-  ["hı", d2],
-  ["hu", d2],
-  ["ke", d2],
-  ["ja", d2],
-
-  // conjunctions
-  ["roı", d2],
-  ["ru", d2],
-  ["ra", d2],
-  ["ro", d2],
-  ["rı", d2],
-  ["keo", d2],
-
-  // vocatives
-  ["hoı", d2],
-
-  // complementizers
-  ["ꝡe", d3],
-  ["ju", d3],
-  ["la", d3],
-
-  // cleft constructions
-  ["na", d3],
-  ["bı", d3],
-  ["go", d3],
-
-  // parentheticals
-  ["kıo", d3],
-]);
+  ...[ ...PRONOUNS,
+       ...QUOTE_MARKERS,
+       ...FOCUS_MARKERS,
+       ...DETERMINERS,
+       ...CONJUNCTIONS,
+       ...VOCATIVES,
+       ...RISING_TONE_ILLOCUTIONS ]
+     .map(w => [adorn(w, ''), d2]),
+  ...[ "ꝡe", "ju", "la", // d3-only complementizers
+       ...CLEFT_CONSTRUCTIONS,
+       ...PARENTHETICALS ]
+     .map(w => [adorn(w, ''), d3])
+  ]);
 
 const reWordAtEnd = /\p{L}+1?$/iu;
 const reConvertKey = /^([ ,.;:?!…>»"'“”‘’]|Enter)$/iu;
