@@ -29,18 +29,21 @@ const NFD_CARTOUCHELESS_WORDS = [].concat(PRONOUNS, DETERMINERS, FUNCTORS_WITH_L
                                             f.replace(/[aeıou]/, v => `${v}\u0301`)))
                                   .map(w => w.normalize('NFD').replace(/i/g, _ => 'ı'));
 
-const MONOGRAPH_MAP = {'m': '', 'b': '', 'p': '', 'f': '',
-                                 'u': '',           'e': '',
-                       'n': '', 'd': '', 't': '', 'z': '', 'c': '', 's': '', 'r': '', 'l': '',
-                                                               'ı': '', 'a': '',
-                       'j': '', 'ꝡ': '', 'q': '', 'g': '', 'k': '', "'": '', 'h': '',
-                                                     'o': '',           'ʼ': '',
-                       '\u0301': '', '\u0308': '', '\u0302': '', // '\u0323': '',
-                       '-': '', ':': '', ',': ' ', '[': '', ']': '', '.': ' ', ';': ' ', '?': ' '},
-
-        DIGRAPH_MAP = {'nh': '', 'ch': '', 'sh': '',
-                       'aı': '', 'ao': '', 'oı': '', 'eı': '',
-                       '[]': ''}
+const MONOGRAPH_MAP = new Map([
+                        ['m', ''], ['b', ''], ['p', ''], ['f', ''],
+                                    ['u', ''],             ['e', ''],
+                        ['n', ''], ['d', ''], ['t', ''], ['z', ''], ['c', ''], ['s', ''], ['r', ''], ['l', ''],
+                                                                        ['ı', ''], ['a', ''],
+                        ['j', ''], ['ꝡ', ''], ['q', ''], ['g', ''], ['k', ''], [`'`, ''], ['h', ''],
+                                                            ['o', ''],             ['ʼ', ''],
+                        ['\u0301', ''], ['\u0308', ''], ['\u0302', ''], // ['\u0323', ''],
+                        ['-', ''], [':', ''], [',', ' '], ['[', ''], [']', ''], ['.', ' '], [';', ' '], ['?', ' ']
+                      ]),
+        DIGRAPH_MAP = new Map([
+                        ['nh', ''], ['ch', ''], ['sh', ''],
+                        ['aı', ''], ['ao', ''], ['oı', ''], ['eı', ''],
+                        ['[]', '']
+                      ]);
 
 const CONSONANTS = `'bcdfghjklmnprstzqꝡ`;
 
@@ -73,10 +76,10 @@ function latinToDerani(lt) {
   for(let i = 0; i < lt.length;) {
     let didReplace = false;
     for(let [map, span] of [[DIGRAPH_MAP, 2], [MONOGRAPH_MAP, 1]]) {
-      let subst = map[lt.substring(i, i + span)];
-      if(subst) {
+      let substr = lt.substring(i, i + span);
+      if(map.has(substr)) {
         didReplace = true;
-        accum += subst;
+        accum += map.get(substr);
         i += span;
         break;
       }
