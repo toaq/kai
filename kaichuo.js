@@ -39,7 +39,7 @@ const wordTones = new Map([
      .map(w => [adorn(w, ''), d3])
   ]);
 
-const reWordAtEnd = /\p{L}+1?$/iu;
+const reWordAtEnd = /[\p{L}'’]+1?$/iu;
 const reConvertKey = /^([ ,.;:?!…>»"'“”‘’]|Enter)$/iu;
 const keyChar = key => key === 'Enter' ? '\n' : key;
 
@@ -99,8 +99,8 @@ function convert(word) {
 window.addEventListener('DOMContentLoaded', (_) => {
   const kai = document.getElementById('kai');
   kai.value = localStorage.getItem('kai');
-  let ch, tone;
   kai.addEventListener('input', (e) => {
+    let ch, tone;
     const size = (e.data ?? "").length;
     // document.getElementById("help-summary").innerText = `d:${e.data} c:${e.isComposing}`;
 
@@ -113,11 +113,13 @@ window.addEventListener('DOMContentLoaded', (_) => {
       const previousWasLetter = /\p{L}/iu.test(previous);
 
       // Attach underdot.
-      if (key === '-' && previousWasLetter) {
-        buf = buf.replace(reWordAtEnd, adornUnderdot);
+      if (previous === '-') {
+        buf = buf.substring(0, buf.length - 1).replace(reWordAtEnd, adornUnderdot)
+            + ("aeıiou".includes(key) ? "'" : '');
+      }
 
       // Compose characters.
-      } else if (ch = compose.get(key)) {
+      if (ch = compose.get(key)) {
         buf = buf + ch;
       } else if (ch = compose.get(previous + key)) {
         buf = buf.replace(/.$/, ch);
