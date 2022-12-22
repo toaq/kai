@@ -48,7 +48,7 @@ const MONOGRAPH_MAP = new Map([
 const CONSONANTS = `'bcdfghjklmnprstzqꝡ`;
 
 const REGEXEN = [[/i/, _ => 'ı'],
-                 [`(^|[^${CONSONANTS}aeıou\u0323])([aeıou](aı|ao|eı|oı))`,
+                 [`(^|[^${CONSONANTS}aeıou\u0323])([aeıou](aı|ao|eı|oı|s|f|c|g|b))`,
                   (_, initial, rime) => `${initial}'${rime}`],
                  [`[${CONSONANTS}]h?[aeıou][\u0323]?[\u0301][${CONSONANTS}aeıou\u0323]*`,
                   w => // add_cartouche
