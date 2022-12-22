@@ -16,9 +16,9 @@
     * { box-sizing: border-box; }
     body { max-width: 40em; margin: auto; font-size: 18px; font-family: 'Open Sans', sans-serif; background: #f8f8f8; color: #222222; padding: 10px; }
     h1 { font-family: 'Raleway', sans-serif; text-align: center; }
-    #kai, #kai-derani { font-family: inherit; font-size: 18px; margin-top: 1em; padding: 0.5em; width: 100%; }
-    #kai-derani { display: none; font-family: Derani; }
-    .derani-pua #kai-derani { display: block; }
+    textarea { font-family: inherit; font-size: 18px; margin-top: 1em; padding: 0.5em; width: 100%; }
+    #derani { display: none; font-family: Derani; }
+    .derani-pua #derani { display: block; }
     .soa { text-align: start; }
     .soa p.ex { margin-inline-start: 4em; text-indent: 20px; }
     .soa kbd {
@@ -35,14 +35,23 @@
   <script src="./kaichuo.js"></script>
   <script>
 window.addEventListener('DOMContentLoaded', (_) => {
+
   const kai = document.getElementById('kai');
   kai.value = localStorage.getItem('kai');
+  onKaiInput({});
   kai.addEventListener('input', onKaiInput);
+
   document.getElementById('select-writing-system').onchange = function() {
     const system = this.selectedOptions[0].value;
     document.body.className = system;
     document.getElementById('kai').rows = system === 'derani-pua' ? 10 : 20;
   };
+
+  document.getElementById('derani').onclick = function() {
+    this.setSelectionRange(0, this.value.length);
+    document.execCommand('copy');
+  };
+
 });
   </script>
 </head>
@@ -66,9 +75,10 @@ window.addEventListener('DOMContentLoaded', (_) => {
       <p>To type tones, press <kbd>1234</kbd> or <kbd>/"^</kbd> at the end of a word, and press <kbd>-</kbd> to insert an underdot:</p>
       <p class="ex"><kbd>Ni chuo ki-shuai, na miu sa poq va3 choqgi maq jaq4 da.</kbd> <br>&rarr; <samp>Ní chuo kı̣shuaı, nä mıu sá poq ꝡä choqgı máq jâq da.</samp></p>
       <p>Type <kbd>v i0 &lt;&lt; &gt;&gt; &lt;: &gt;: [[ ]]</kbd> to write <samp>ꝡ i « » ‹ › ⟦ ⟧</samp>.</p>
+      <p>In Deranı mode, click on the Deranı textbox to copy its contents to clipboard.</p>
     </details>
   </div>
   <textarea id="kai" rows="20" autofocus placeholder="Kaı súq doa"></textarea>
-  <div id="kai-derani"></div>
+  <textarea id="derani" rows="10" readonly></textarea>
 </body>
 </html>

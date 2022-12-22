@@ -140,5 +140,5 @@ function onKaiInput(e) {
   kai.value = buf + post;
   kai.selectionStart = kai.selectionEnd = buf.length;
   localStorage.setItem('kai', kai.value);
-  document.getElementById('kai-derani').innerText = latinToDerani(buf.trim());
+  document.getElementById('derani').innerText = latinToDerani(buf.trim());
 }
