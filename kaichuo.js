@@ -96,58 +96,49 @@ function convert(word) {
   return word;
 }
 
-window.addEventListener('DOMContentLoaded', (_) => {
-  const kai = document.getElementById('kai');
-  kai.value = localStorage.getItem('kai');
-  kai.addEventListener('input', (e) => {
-    let ch, tone;
-    const size = (e.data ?? "").length;
-    // document.getElementById("help-summary").innerText = `d:${e.data} c:${e.isComposing}`;
+function onKaiInput(e) {
+  let ch, tone;
+  const size = (e.data ?? "").length;
+  // document.getElementById("help-summary").innerText = `d:${e.data} c:${e.isComposing}`;
 
-    let buf = kai.value.substring(0, kai.selectionStart - size);
-    const post = kai.value.substring(kai.selectionEnd);
+  let buf = kai.value.substring(0, kai.selectionStart - size);
+  const post = kai.value.substring(kai.selectionEnd);
 
-    for (const key of [...e.data ?? ""]) {
-      const previous = buf[buf.length - 1] || "";
-      const previousLength = buf.length;
-      const previousWasLetter = /\p{L}/iu.test(previous);
+  for (const key of [...e.data ?? ""]) {
+    const previous = buf[buf.length - 1] || "";
+    const previousLength = buf.length;
+    const previousWasLetter = /\p{L}/iu.test(previous);
 
-      // Attach underdot.
-      if (previous === '-') {
-        buf = buf.substring(0, buf.length - 1).replace(reWordAtEnd, adornUnderdot)
-            + ("aeıiou".includes(key) ? "'" : '');
-      }
-
-      // Compose characters.
-      if (ch = compose.get(key)) {
-        buf = buf + ch;
-      } else if (ch = compose.get(previous + key)) {
-        buf = buf.replace(/.$/, ch);
-
-      // Attach tones.
-      } else if ((tone = toneKeys.get(key))
-                // Digits only act as tone converters right after a letter:
-                && !(/[0-9]/.test(key) && !previousWasLetter)
-            ) {
-        // Manually add a tone to the last word.
-        buf = buf.replace(reWordAtEnd, word => adorn(word, tone));
-      } else if (reConvertKey.test(key)) {
-        // Automatically add tones to the last word.
-        buf = buf.replace(reWordAtEnd, convert) + keyChar(key);
-
-      } else {
-        buf += key;
-      }
+    // Attach underdot.
+    if (previous === '-') {
+      buf = buf.substring(0, buf.length - 1).replace(reWordAtEnd, adornUnderdot)
+          + ("aeıiou".includes(key) ? "'" : '');
     }
 
-    const script = document.getElementById('select-writing-system').selectedOptions[0].value;
-    if(script == 'derani-pua') {
-      const splittingPoint = buf.lastIndexOf(' ');
-      buf = latinToDerani(buf.substring(0, splittingPoint)) + buf.substring(splittingPoint);
-    }
+    // Compose characters.
+    if (ch = compose.get(key)) {
+      buf = buf + ch;
+    } else if (ch = compose.get(previous + key)) {
+      buf = buf.replace(/.$/, ch);
 
-    kai.value = buf + post;
-    kai.selectionStart = kai.selectionEnd = buf.length;
-    localStorage.setItem('kai', kai.value);
-  });
-});
+    // Attach tones.
+    } else if ((tone = toneKeys.get(key))
+              // Digits only act as tone converters right after a letter:
+              && !(/[0-9]/.test(key) && !previousWasLetter)
+          ) {
+      // Manually add a tone to the last word.
+      buf = buf.replace(reWordAtEnd, word => adorn(word, tone));
+    } else if (reConvertKey.test(key)) {
+      // Automatically add tones to the last word.
+      buf = buf.replace(reWordAtEnd, convert) + keyChar(key);
+
+    } else {
+      buf += key;
+    }
+  }
+
+  kai.value = buf + post;
+  kai.selectionStart = kai.selectionEnd = buf.length;
+  localStorage.setItem('kai', kai.value);
+  document.getElementById('kai-derani').innerText = latinToDerani(buf.trim());
+}

@@ -14,10 +14,11 @@
   <title>mı Kaıchuo</title>
   <style>
     * { box-sizing: border-box; }
-    body { max-width: 40em; margin: auto; font-size: 18px; font-family: 'Open Sans', sans-serif; text-align: center; background: #f8f8f8; color: #222222; padding: 10px; }
-    h1 { font-family: 'Raleway', sans-serif; }
-    textarea { font-family: inherit; font-size: 18px; margin-top: 1em; padding: 0.5em; width: 100%; }
-    textarea.derani-pua { font-family: Derani; }
+    body { max-width: 40em; margin: auto; font-size: 18px; font-family: 'Open Sans', sans-serif; background: #f8f8f8; color: #222222; padding: 10px; }
+    h1 { font-family: 'Raleway', sans-serif; text-align: center; }
+    #kai, #kai-derani { font-family: inherit; font-size: 18px; margin-top: 1em; padding: 0.5em; width: 100%; }
+    #kai-derani { display: none; font-family: Derani; }
+    .derani-pua #kai-derani { display: block; }
     .soa { text-align: start; }
     .soa p.ex { margin-inline-start: 4em; text-indent: 20px; }
     .soa kbd {
@@ -26,20 +27,31 @@
     .soa samp { font-family: inherit; font-weight: bold; color: #197A92; }
 
     @font-face {
-      src: url("https://github.com/toaq/fonts/releases/download/latest/Derani.woff2") format(woff2);
+      src: url("./Derani.woff2") format(woff2);
       font-family: Derani;
     }
   </style>
   <script src="./latin-to-derani.js"></script>
   <script src="./kaichuo.js"></script>
+  <script>
+window.addEventListener('DOMContentLoaded', (_) => {
+  const kai = document.getElementById('kai');
+  kai.value = localStorage.getItem('kai');
+  kai.addEventListener('input', onKaiInput);
+  document.getElementById('select-writing-system').onchange = function() {
+    const system = this.selectedOptions[0].value;
+    document.body.className = system;
+    document.getElementById('kai').rows = system === 'derani-pua' ? 10 : 20;
+  };
+});
+  </script>
 </head>
 <body>
   <h1>mı Kaıchuo</h1>
   <div class="soa">
     <p>
       <label for="writing-system">Writing system:</label>
-      <select id="select-writing-system" name="writing-system"
-              onchange="document.getElementById('kai').className = this.selectedOptions[0].value">
+      <select id="select-writing-system" name="writing-system">
         <option value="latin" selected>Latin</option>
         <option value="derani-pua">Deranı (PUA)</option>
       </select>
@@ -57,5 +69,6 @@
     </details>
   </div>
   <textarea id="kai" rows="20" autofocus placeholder="Kaı súq doa"></textarea>
+  <div id="kai-derani"></div>
 </body>
 </html>
