@@ -30,19 +30,19 @@ const NFD_CARTOUCHELESS_WORDS = [].concat(PRONOUNS, DETERMINERS, FUNCTORS_WITH_L
                                   .map(w => w.normalize('NFD').replace(/i/g, _ => 'ı'));
 
 const MONOGRAPH_MAP = new Map([
-                        ['m', ''], ['b', ''], ['p', ''], ['f', ''],
-                                    ['u', ''],             ['e', ''],
-                        ['n', ''], ['d', ''], ['t', ''], ['z', ''], ['c', ''], ['s', ''], ['r', ''], ['l', ''],
-                                                                        ['ı', ''], ['a', ''],
-                        ['j', ''], ['ꝡ', ''], ['q', ''], ['g', ''], ['k', ''], [`'`, ''], ['h', ''],
-                                                            ['o', ''],             ['ʼ', ''],
-                        ['\u0301', ''], ['\u0308', ''], ['\u0302', ''], // ['\u0323', ''],
-                        ['-', ''], [':', ''], [',', ' '], ['[', ''], [']', ''], ['.', ' '], [';', ' '], ['?', ' ']
+                        ['m', '󱚰'], ['b', '󱚲'], ['p', '󱚳'], ['f', '󱚴'],
+                                    ['u', '󱚲'],             ['e', '󱚴'],
+                        ['n', '󱚵'], ['d', '󱚶'], ['t', '󱚷'], ['z', '󱚸'], ['c', '󱚹'], ['s', '󱚺'], ['r', '󱚻'], ['l', '󱚼'],
+                                                                        ['ı', '󱚹'], ['a', '󱚺'],
+                        ['j', '󱚾'], ['ꝡ', '󱛁'], ['q', '󱛂'], ['g', '󱛃'], ['k', '󱛄'], [`'`, '󱛅'], ['h', '󱛆'],
+                                                            ['o', '󱛃'],             ['ʼ', '󱛅'],
+                        ['\u0301', '󱛊'], ['\u0308', '󱛋'], ['\u0302', '󱛌'], // ['\u0323', '󱛒'],
+                        ['-', '󱛒'], [':', '󱛓'], [',', ' 󱛔'], ['[', '󱛘'], [']', '󱛙'], ['.', ' 󱛕'], [';', ' 󱛖'], ['?', ' 󱛗']
                       ]),
         DIGRAPH_MAP = new Map([
-                        ['nh', ''], ['ch', ''], ['sh', ''],
-                        ['aı', ''], ['ao', ''], ['oı', ''], ['eı', ''],
-                        ['[]', '']
+                        ['nh', '󱚽'], ['ch', '󱚿'], ['sh', '󱛀'],
+                        ['aı', '󱚺󱛎󱚹'], ['ao', '󱚺󱛎󱛃'], ['oı', '󱛃󱛎󱚹'], ['eı', '󱚴󱛎󱚹'],
+                        ['[]', '󱛚']
                       ]);
 
 const CONSONANTS = `'bcdfghjklmnprstzqꝡ`;
@@ -54,17 +54,17 @@ const REGEXEN = [[/i/, _ => 'ı'],
                   w => // add_cartouche
                     !NFD_CARTOUCHELESS_WORDS.includes(w) &&
                     !['hu\u0301\u0323', 'hu\u0323\u0301'].some(hu => w.includes(hu))
-                    ? `${w}` : w],
+                    ? `󱛘${w}󱛙` : w],
                  [`\u0323([\u0301\u0302\u0323]?[aeıou]?[mq]?)([${CONSONANTS}])`,
-                  (_, tail, stem) => `${tail}${stem}`],
+                  (_, tail, stem) => `${tail}󱛒${stem}`],
                  [/([aeıou])([\u0301\u0308\u0302])/,
                   (_, vowel, tone) => tone + vowel],
                  [/(?!(?:aı|ao|eı|oı))([aeıou])((?!(aı|ao|eı|oı))[aeıou])/,
-                  (_, nucleus1, nucleus2) => `${nucleus1}${nucleus2}`],
-                 [/([aeıou])m/, (_, vowel) => `${vowel}`],
-                 [/ (da)[.…]/,                                  (_, illoc) => ` ${illoc} `],
-                 [/ (ka|ba|nha|doa|ꝡo|da\u0302|mo\u0302q)[.…]/, (_, illoc) => ` ${illoc} `],
-                 [/ (mo\u0301q)[.…?]/,                          (_, illoc) => ` ${illoc} `],
+                  (_, nucleus1, nucleus2) => `${nucleus1}󱛍${nucleus2}`],
+                 [/([aeıou])m/, (_, vowel) => `${vowel}󱚱`],
+                 [/ (da)[.…]/,                                  (_, illoc) => ` ${illoc} 󱛕`],
+                 [/ (ka|ba|nha|doa|ꝡo|da\u0302|mo\u0302q)[.…]/, (_, illoc) => ` ${illoc} 󱛖`],
+                 [/ (mo\u0301q)[.…?]/,                          (_, illoc) => ` ${illoc} 󱛗`],
                 ]
                  .map(([re, sub]) => [new RegExp(re, 'g'), sub]);
 
@@ -93,6 +93,6 @@ function latinToDerani(lt) {
   //   ◆ Cartouches : handle PO, SHU, MO…
   //   ◆ Cartouches : t1 words following determiners.
   //   ◆ Empty cartouche
-  //   ◆ ⟪▓▓⟫: shu-names, onomastics
+  //   ◆ ⟪󱛒▓▓󱛒⟫: shu-names, onomastics
   return accum;
 }
