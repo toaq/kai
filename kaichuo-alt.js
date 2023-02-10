@@ -24,6 +24,26 @@ const compose = new Map([
   [']]', '⟧'],
 ]);
 
+const MATRIX_SUBORDINATORS = ["ꝡa", "ma", "tıo"],
+      NOMINAL_SUBORDINATORS = ["ꝡä", "mä", "tïo", "lä", "ꝡé", "ná"],
+      ADNOMINAL_SUBORDINATORS = ["ꝡë", "jü"],
+      PREDICATIZERS = ["jeı", "mea", "po"],
+      QUOTE_MARKERS = ["mı", "shu", "mo"],
+      DETERMINERS = ["ló", "ké", "sá", "sía", "tú", "túq", "báq", "já", "hí", "ní", "hú"],
+      CONJUNCTIONS = ["róı", "rú", "rá", "ró", "rí", "kéo"],
+      FALLING_TONE_ILLOCUTIONS = ["ka", "da", "ba", "nha", "doa", "ꝡo"],
+      PEAKING_TONE_ILLOCUTIONS = ["dâ", "môq"],
+      RISING_TONE_ILLOCUTIONS = ["móq"],
+      ILLOCUTIONS = [].concat(FALLING_TONE_ILLOCUTIONS, RISING_TONE_ILLOCUTIONS, PEAKING_TONE_ILLOCUTIONS),
+      FOCUS_MARKERS = ["kú", "tóu", "béı", "máo", "júaq"],
+      CLEFT_CONSTRUCTIONS = ["bï", "nä", "gö"],
+      PARENTHETICALS = ["kïo"],
+      VOCATIVES = ["hóı"],
+      TERMINATORS = ["teo", "kı"],
+      EXOPHORIC_PRONOUNS = ["jí", "súq", "nháo", "súna", "nhána", "úmo", "íme", "súho", "áma", "há"],
+      ENDOPHORIC_PRONOUNS = ["hó", "máq", "tá", "hóq", "áq", "chéq", "hóa"],
+      PRONOUNS = [].concat(EXOPHORIC_PRONOUNS, ENDOPHORIC_PRONOUNS);
+
 const wordTones = new Map([
   ...[ ...PRONOUNS,
        ...QUOTE_MARKERS,
