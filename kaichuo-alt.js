@@ -46,10 +46,8 @@ const MATRIX_SUBORDINATORS = ["ꝡa", "ma", "tıo"],
 
 const wordTones = new Map([
   ...[ ...PRONOUNS,
-       ...QUOTE_MARKERS,
        ...FOCUS_MARKERS,
        ...DETERMINERS,
-       ...CONJUNCTIONS,
        ...VOCATIVES,
        ...RISING_TONE_ILLOCUTIONS ]
      .map(w => [adorn(w, ''), d2]),
