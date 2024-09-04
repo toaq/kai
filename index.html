@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,78 +8,170 @@
   <meta http-equiv="content-type" content="text/html">
   <meta name="description" content="Sá chuo ꝡë chôq hóa nä kaı há báq no lô Toaqzu">
   <meta name="language" content="Toaq">
-  <meta name="author" content="mı Lına">
-  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-  <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Noto+Sans' rel='stylesheet' type='text/css'>
 
   <title>mı Kaıchuo</title>
   <style>
-    * { box-sizing: border-box; }
-    body { max-width: 40em; margin: auto; font-size: 18px; font-family: 'Open Sans', sans-serif; background: #f8f8f8; color: #222222; padding: 10px; }
-    h1 { font-family: 'Raleway', sans-serif; text-align: center; }
-    textarea { font-family: inherit; font-size: 18px; margin-top: 1em; padding: 0.5em; width: 100%; }
-    #derani { display: none; font-family: Derani; }
-    .derani-pua #derani { display: block; }
-    .soa { text-align: start; }
-    .soa p.ex { margin-inline-start: 4em; text-indent: 20px; }
+    :root {
+      --peq: #f8f8fb;
+      --puim: #000000d0;
+      --boaq: #d8e8f8;
+      --cai: #197A92;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-size: 18px;
+      font-family: Derani, 'Noto Sans', sans-serif;
+      background: var(--peq);
+      color: var(--puim);
+      margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+      padding: 1rem;
+    }
+
+    summary {
+      text-align: center;
+    }
+
+    main>* {
+      max-width: 40rem;
+      margin: auto;
+    }
+
+    textarea {
+      font-family: inherit;
+      font-size: 18px;
+      padding: 0.5em;
+      width: 100%;
+      display: block;
+    }
+
+    .soa {
+      padding: 1rem;
+      text-align: start;
+      background: var(--boaq);
+      max-width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    .soa>* {
+      max-width: 40rem;
+      margin: auto;
+    }
+
+    .soa p.ex {
+      margin-inline-start: 4em;
+      text-indent: 20px;
+    }
+
     .soa kbd {
-        font-family: 'Monaco', 'Consolas', 'DejaVu Sans Mono', monospace;
-        background: rgba(0,0,0,0.1); padding: 1px 4px; border-radius: 4px; }
-    .soa samp { font-family: inherit; font-weight: bold; color: #197A92; }
+      font-family: 'Monaco', 'Consolas', 'DejaVu Sans Mono', monospace;
+      background: rgba(0, 0, 0, 0.1);
+      padding: 1px 4px;
+      border-radius: 4px;
+    }
+
+    .soa samp {
+      font-family: inherit;
+      font-weight: bold;
+      color: var(--cai);
+    }
 
     @font-face {
       src: url("./Derani.woff2") format(woff2);
       font-family: Derani;
+      unicode-range: U+F????;
+    }
+
+    .hints {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    #keyboard {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      max-width: 30rem;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .keyboard-row {
+      display: flex;
+      gap: 2px;
+    }
+
+    .keyboard-key {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      background: var(--boaq);
+      text-align: center;
+      letter-spacing: -1px;
+      height: 32px;
+    }
+
+    .key-wide {
+      background: #f0d0e0;
+    }
+
+    .key-tone {
+      background: #f0d0e0;
+    }
+
+    .key-unlearned {
+      background: #eee;
     }
   </style>
-  <script src="./deranı_from_latin.js"></script>
+</head>
+
+<body>
+  <main>
+    <div class="soa">
+      <h1>kaıchuo</h1>
+      <div class="hints">
+        <div class="hint">
+          <kbd>2 3 4</kbd>
+          <span>tones</span>
+        </div>
+        <div class="hint">
+          <kbd>w0 i0 &lt;&lt;</kbd>
+          <span>w i «</span>
+        </div>
+        <div class="hint">
+          <kbd>Ctrl+/</kbd>
+          <label for="derani-mode">
+            <input id="derani-mode" type="checkbox" onchange="toggleDeraniMode()" />
+            Derani mode
+          </label>
+        </div>
+      </div>
+    </div>
+    <div id="keyboard">
+    </div>
+    <textarea id="kai" rows="20" autofocus placeholder="Kaı súq doa"></textarea>
+  </main>
   <script src="./kaichuo.js"></script>
   <script>
-window.addEventListener('DOMContentLoaded', (_) => {
+    window.addEventListener('DOMContentLoaded', (_) => {
 
-  const kai = document.getElementById('kai');
-  kai.value = localStorage.getItem('kai');
-  onKaiInput({});
-  kai.addEventListener('input', onKaiInput);
-
-  document.getElementById('select-writing-system').onchange = function() {
-    const system = this.selectedOptions[0].value;
-    document.body.className = system;
-    document.getElementById('kai').rows = system === 'derani-pua' ? 10 : 20;
-  };
-
-  document.getElementById('derani').onclick = function() {
-    this.setSelectionRange(0, this.value.length);
-    document.execCommand('copy');
-  };
-
-});
+      const kai = document.getElementById('kai');
+      kai.value = localStorage.getItem('kai');
+      onKaiInput({});
+      kai.addEventListener('keydown', onKaiKeydown);
+      kai.addEventListener('input', onKaiInput);
+    });
   </script>
-</head>
-<body>
-  <h1>mı Kaıchuo</h1>
-  <div class="soa">
-    <p>
-      <label for="writing-system">Writing system:</label>
-      <select id="select-writing-system" name="writing-system">
-        <option value="latin" selected>Latin</option>
-        <option value="derani-pua">Deranı (PUA)</option>
-      </select>
-    </p>
-    <details>
-      <summary id="help-summary">Help</summary>
-      <p>This is a tool for writing <a href="https://toaq.net">Toaq</a> on an everyday keyboard.</p>
-      <p>Words you type are automatically adorned with tone markers:</p>
-      <p class="ex"><kbd>Va suq na chietua ji hoa nha.</kbd> <br>&rarr; <samp>Ꝡa súq nä chıetua jí hóa nha.</samp></p>
-      <p>(The default is <samp>o</samp> for verbs, <samp>ó</samp> for pronouns, and each particle's default tone.)</p>
-      </p>
-      <p>To type tones, press <kbd>1234</kbd> or <kbd>/"^</kbd> at the end of a word, and press <kbd>-</kbd> to insert an underdot:</p>
-      <p class="ex"><kbd>Ni chuo ki-shuai, na miu sa poq va3 choqgi maq jaq4 da.</kbd> <br>&rarr; <samp>Ní chuo kı̣shuaı, nä mıu sá poq ꝡä choqgı máq jâq da.</samp></p>
-      <p>Type <kbd>v i0 &lt;&lt; &gt;&gt; &lt;: &gt;: [[ ]]</kbd> to write <samp>ꝡ i « » ‹ › ⟦ ⟧</samp>.</p>
-      <p>In Deranı mode, click on the Deranı textbox to copy its contents to clipboard.</p>
-    </details>
-  </div>
-  <textarea id="kai" rows="20" autofocus placeholder="Kaı súq doa"></textarea>
-  <textarea id="derani" rows="10" readonly></textarea>
 </body>
+
 </html>
