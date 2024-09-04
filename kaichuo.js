@@ -271,7 +271,7 @@ function onKaiInput(e) {
 
   for (const key of [...e.data ?? ""]) {
     const previous = buf[buf.length - 1] || "";
-    const previousWasLetter = /\p{L}|[\uf16b0-\uf16cf]/iu.test(previous);
+    const previousWasLetter = /\p{L}|[\u{f16b0}-\u{f16cf}]/iu.test(previous);
     let letter = deraniMode ? deraniLayout.get(key.toLowerCase()) ?? key : key;
 
     // Attach underdot.
