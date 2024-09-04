@@ -315,6 +315,7 @@ function onKaiInput(e) {
 
       buf += letter;
     }
+    lastKey = key;
   }
 
   kai.value = buf + post;
@@ -338,7 +339,6 @@ function onKaiKeydown(e) {
     }
     learnedCodeToKeyMapping.set(e.code, e.key);
   }
-  setTimeout(() => lastKey = e.key, 0);
   renderKeyboard();
 }
 
