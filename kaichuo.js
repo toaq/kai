@@ -166,6 +166,7 @@ function renderKeyboard() {
       keyDiv.className = "keyboard-key";
       if (key.width !== 1) keyDiv.className += " key-wide";
       if (["2", "3", "4"].includes(key.key)) keyDiv.className += " key-tone";
+      if (key.key === "-" && !deraniMode) keyDiv.className += " key-tone";
       if (!learnedCodeToKeyMapping.has(key.code)) keyDiv.className += " key-unlearned";
       keyDiv.innerText = keyboardLabel(key);
       keyDiv.style.flex = key.width;
