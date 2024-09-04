@@ -91,9 +91,25 @@
     }
 
     .hints {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
+      max-width: fit-content;
+    }
+
+    .actions {
+      max-width: fit-content;
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+    }
+
+    .actions > button {
+      padding: 4px 8px;
+    }
+
+    .hint {
+      display: inline-block;
+    }
+
+    .hint+.hint {
+      margin-inline-start: 2em;
     }
 
     #keyboard {
@@ -132,6 +148,16 @@
     .key-unlearned {
       background: #eee;
     }
+
+    @media screen and (max-width: 600px) {
+      .hints {
+        font-size: 13px;
+      }
+
+      #keyboard {
+        max-width: 22rem;
+      }
+    }
   </style>
 </head>
 
@@ -158,6 +184,10 @@
       </div>
     </div>
     <div id="keyboard">
+    </div>
+    <div class="actions">
+      <button onclick="clearTextbox()">Clear</button>
+      <button onclick="copyTextbox()">Copy</button>
     </div>
     <textarea id="kai" rows="20" autofocus placeholder="Kaı súq doa"></textarea>
   </main>

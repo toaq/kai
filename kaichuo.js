@@ -349,3 +349,31 @@ function toggleDeraniMode() {
   document.getElementById("derani-mode").checked = deraniMode;
   renderKeyboard();
 }
+
+function clearTextbox() {
+  const kai = document.getElementById('kai');
+  if (kai.value.length < 50 || confirm("Really clear the textbox?")) kai.value = '';
+}
+
+function copyToClipboard(contents) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(contents);
+  } else {
+    const textArea = document.createElement("textarea");
+    textArea.value = contents;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand("copy");
+    } catch (err) {
+      console.error("copyToClipboard failed:", { description, err, contents });
+    }
+    document.body.removeChild(textArea);
+  }
+}
+
+function copyTextbox() {
+  const kai = document.getElementById('kai');
+  if (kai.value) copyToClipboard(kai.value);
+}
