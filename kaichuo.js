@@ -131,16 +131,6 @@ const qwertyKeyboard = [
     { code: "Slash", key: "/", width: 1 },
     { code: "ShiftRight", key: "Shift", width: 2.25 },
   ],
-  [
-    { code: "ControlLeft", key: "Control", width: 1.25 },
-    { code: "MetaLeft", key: "Win", width: 1.25 },
-    { code: "AltLeft", key: "Alt", width: 1.25 },
-    { code: "Space", key: " ", width: 6.25 },
-    { code: "AltRight", key: "Alt", width: 1.25 },
-    { code: "MetaRight", key: "Win", width: 1.25 },
-    { code: "ContextMenu", key: "Menu", width: 1.25 },
-    { code: "ControlRight", key: "Control", width: 1.25 },
-  ],
 ]
 
 const learnedCodeToKeyMapping = new Map(qwertyKeyboard.flatMap(row => row.map(key => [key.code, key.key])));
