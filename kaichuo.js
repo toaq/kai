@@ -3,6 +3,13 @@ const d2 = '\u0301';
 const d3 = '\u0308';
 const d4 = '\u0302';
 const underdot = '\u0323';
+const isMac = /Mac/.test(navigator.platform);
+
+if (isMac) {
+  for (const e of document.getElementsByClassName("ctrl-plus")) {
+    e.innerText = "⌘";
+  }
+}
 
 const toneKeys = new Map([
   ['2', d2],
@@ -264,6 +271,7 @@ const vowels = ["a", "e", "i", "o", "u"];
 function onKaiInput(e) {
   let ch, tone;
   const size = (e.data ?? "").length;
+  if (/delete/.test(e.inputType)) lastKey = '';
   // document.getElementById("help-summary").innerText = `d:${e.data} c:${e.isComposing}`;
 
   let buf = kai.value.substring(0, kai.selectionStart - size);
@@ -326,20 +334,19 @@ function onKaiInput(e) {
 }
 
 function onKaiKeydown(e) {
-  if (e.ctrlKey && e.key === "/") {
+  if ((isMac ? e.metaKey : e.ctrlKey) && e.key === "/") {
     e.preventDefault();
     toggleDeraniMode();
     return;
   }
   if (e.ctrlKey || e.metaKey) return;
-  if (!e.shiftKey) {
-    const old = learnedCodeToKeyMapping.get(e.code);
-    if (old && e.key !== old) {
-      learnedCodeToKeyMapping.clear();
-    }
-    learnedCodeToKeyMapping.set(e.code, e.key);
-  }
   renderKeyboard();
+  if (e.shiftKey || e.altKey) return;
+  const old = learnedCodeToKeyMapping.get(e.code);
+  if (old && e.key !== old) {
+    learnedCodeToKeyMapping.clear();
+  }
+  learnedCodeToKeyMapping.set(e.code, e.key);
 }
 
 renderKeyboard();
@@ -377,3 +384,5 @@ function copyTextbox() {
   const kai = document.getElementById('kai');
   if (kai.value) copyToClipboard(kai.value);
 }
+
+
