@@ -284,7 +284,7 @@ function onKaiInput(e) {
     let letter = deraniMode ? deraniLayout.get(key.toLowerCase()) ?? key : key;
 
     // Attach underdot.
-    if (previous === '-') {
+    if (previous === '-' && /\p{L}/iu.test(letter)) {
       buf = buf.substring(0, buf.length - 1).replace(reWordAtEnd, adornUnderdot)
         + ("aeıiou".includes(letter) ? "'" : '');
     }
