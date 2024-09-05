@@ -1,3 +1,9 @@
+const isHighSurrogate = s => s && s.charCodeAt(0) | 0x3ff === 0xdfff;
+const lastCodepoint = s => {
+  const c = s[s.length - 1];
+  return isHighSurrogate(c) ? s[s.length - 2] + c : c
+}
+
 const d1 = '';
 const d2 = '\u0301';
 const d3 = '\u0308';
@@ -268,6 +274,7 @@ function convert(word) {
 
 let lastKey = '';
 const vowels = ["a", "e", "i", "o", "u"];
+const reLetter = /\p{L}|[\u{f16b0}-\u{f16cf}]/iu;
 
 function onKaiInput(e) {
   let ch, tone;
@@ -279,12 +286,12 @@ function onKaiInput(e) {
   const post = kai.value.substring(kai.selectionEnd);
 
   for (const key of [...e.data ?? ""]) {
-    const previous = buf[buf.length - 1] || "";
-    const previousWasLetter = /\p{L}|[\u{f16b0}-\u{f16cf}]/iu.test(previous);
+    const previous = lastCodepoint(buf) || "";
+    const previousWasLetter = reLetter.test(previous);
     let letter = deraniMode ? deraniLayout.get(key.toLowerCase()) ?? key : key;
 
     // Attach underdot.
-    if (previous === '-' && /\p{L}/iu.test(letter)) {
+    if (previous === '-' && reLetter.test(letter)) {
       buf = buf.substring(0, buf.length - 1).replace(reWordAtEnd, adornUnderdot)
         + ("aeıiou".includes(letter) ? "'" : '');
     }
@@ -303,7 +310,7 @@ function onKaiInput(e) {
       // Attach tones.
     } else if ((tone = toneKeys.get(letter))
       // Digits only act as tone converters right after a letter:
-      && !(/[0-9]/.test(letter) && !previousWasLetter)
+      && previousWasLetter
     ) {
       // Manually add a tone to the last word.
       buf = buf.replace(reWordAtEnd, word => adorn(word, tone));
