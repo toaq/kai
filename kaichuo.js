@@ -1,4 +1,4 @@
-const isHighSurrogate = s => s && s.charCodeAt(0) | 0x3ff === 0xdfff;
+const isHighSurrogate = s => s && (s.charCodeAt(0) | 0x3ff) === 0xdfff;
 const lastCodepoint = s => {
   const c = s[s.length - 1];
   return isHighSurrogate(c) ? s[s.length - 2] + c : c
