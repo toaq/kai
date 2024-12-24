@@ -180,7 +180,7 @@ function renderKeyboard() {
     for (const key of row) {
       const keyDiv = document.createElement("div");
       keyDiv.className = "keyboard-key";
-      if (key.width !== 1) keyDiv.className += " key-wide";
+      if (key.key.length !== 1) keyDiv.className += " key-wide";
       if (["2", "3", "4"].includes(key.key)) keyDiv.className += " key-tone";
       if (key.key === "-" && !deraniMode) keyDiv.className += " key-tone";
       if (!learnedCodeToKeyMapping.has(key.code)) keyDiv.className += " key-unlearned";
@@ -381,12 +381,13 @@ function toggleDeraniMode() {
 }
 
 function setDeraniMode(element) {
-  console.log(element.value);
+  deraniMode = element.value;
+  renderKeyboard();
 }
 
 function clearTextbox() {
   const kai = document.getElementById('kai');
-  if (kai.value.length < 50 || confirm("Really clear the textbox?")) kai.value = '';
+  if (kai.value.length < 50 || confirm("Iu sheaja há káıtıaı bá? / Really clear the textbox?")) kai.value = '';
 }
 
 function copyToClipboard(contents) {
@@ -409,7 +410,15 @@ function copyToClipboard(contents) {
 
 function copyTextbox() {
   const kai = document.getElementById('kai');
-  if (kai.value) copyToClipboard(kai.value);
+  if (!kai.value) return;
+  copyToClipboard(kai.value);
+  document.getElementById('kopinua').innerHTML = `<i class="far fa-copy" style="transform:rotate(20deg)"></i> Hao ka~`;
+  kai.selectionStart = 0;
+  kai.selectionEnd = kai.value.length;
+  kai.focus();
+  setTimeout(() => {
+    document.getElementById('kopinua').innerHTML = `<i class="far fa-copy"></i> Kopınua`;
+  }, 800);
 }
 
 

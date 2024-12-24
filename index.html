@@ -9,7 +9,9 @@
   <meta name="description" content="kaırom po Tóaqzu">
   <meta name="language" content="Toaq">
   <link href='https://fonts.googleapis.com/css?family=Noto+Sans' rel='stylesheet' type='text/css'>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
   <title>kaı</title>
   <style>
     :root {
@@ -21,6 +23,12 @@
 
     * {
       box-sizing: border-box;
+    }
+
+    button,
+    input,
+    select {
+      font-family: Derani, 'Noto Sans', sans-serif;
     }
 
     body {
@@ -174,11 +182,8 @@
       <h1>󱛘󱛄󱚺󱛎󱚹󱛙</h1>
       <div class="hints">
         <div class="hint">
-          <kbd>2 3 4</kbd>
-          <div class="stack">
-            <span>tones</span>
-            <span>donelaı</span>
-          </div>
+          <kbd>a2 a3 a4</kbd>
+          <span>á ä â</span>
         </div>
         <div class="hint">
           <kbd>w0 i0 &lt;&lt;</kbd>
@@ -200,8 +205,8 @@
     <div id="keyboard">
     </div>
     <div class="actions">
-      <button onclick="clearTextbox()">Clear</button>
-      <button onclick="copyTextbox()">Copy</button>
+      <button onclick="clearTextbox()"><i class="fa fa-xmark"></i> Sheaja</button>
+      <button id="kopinua" onclick="copyTextbox()"><i class="far fa-copy"></i> Kopınua</button>
     </div>
     <textarea id="kai" rows="20" autofocus placeholder="Kaı súq sá doa"></textarea>
   </main>
