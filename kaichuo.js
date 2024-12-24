@@ -76,6 +76,13 @@ const deraniLayout = new Map([
   ["=", "󱛚"],
 ]);
 
+const fallingDiphthongs = new Map([
+  ["ai", "󱚶"],
+  ["ao", "󱚳"],
+  ["ei", "󱚸"],
+  ["oi", "󱚽"],
+])
+
 const toneToDerani = {
   '\u0301': "\u{f16ca}",
   '\u0308': "\u{f16cb}",
@@ -148,7 +155,8 @@ const qwertyKeyboard = [
 
 const learnedCodeToKeyMapping = new Map(qwertyKeyboard.flatMap(row => row.map(key => [key.code, key.key])));
 
-let deraniMode = false;
+// "" | "official" | "reform";
+let deraniMode = "";
 
 function keyboardLabel(key) {
   const keyName = learnedCodeToKeyMapping.get(key.code) ?? key.key;
@@ -157,6 +165,8 @@ function keyboardLabel(key) {
     case "CapsLock": return "Caps";
     case "Backspace": return "⌫";
     case "Control": return "Ctrl";
+    case "󱛘": return "󱛘󱛅";
+    case "󱛙": return "󱛘󱛅󱛙";
     case " ": return "Space";
     default: return label;
   }
@@ -186,13 +196,13 @@ function renderKeyboard() {
 const
   QUOTE_MARKERS = "mı shu mo 󱚰󱚹 󱛀󱚲 󱚰󱛃".split(/ /),
   DETERMINERS = "ló ké sá sía tú túq báq já hí ní hú 󱚼󱛃 󱛄󱚴 󱚺󱚺 󱚺󱚹󱛍󱚺 󱚷󱚲 󱚷󱚲󱛂 󱚲󱚺󱛂 󱚾󱚺 󱛆󱚹 󱚵󱚹 󱛆󱚲".split(/ /),
-  CONJUNCTIONS = "róı rú rá ró rí kéo 󱚻󱛃󱛎󱚹 󱚻󱚲 󱚻󱚺 󱚻󱛃 󱚻󱚹 󱛄󱚴󱛍󱛃".split(/ /),
+  CONJUNCTIONS = "róı rú rá ró rí kéo 󱚻󱛃󱛎󱚹 󱚻󱛊 󱚻󱚲 󱚻󱚺 󱚻󱛃 󱚻󱚹 󱛄󱚴󱛍󱛃".split(/ /),
   RISING_TONE_ILLOCUTIONS = "móq 󱚰󱛃󱛂".split(/ /),
-  FOCUS_MARKERS = "kú tó béı máo júaq 󱛄󱚲 󱚷󱛃 󱚲󱚴󱛎󱚹 󱚰󱚺󱛎󱛃 󱚾󱚲󱛍󱚺󱛂".split(/ /),
+  FOCUS_MARKERS = "kú tó béı máo júaq 󱛄󱚲 󱚷󱛃 󱚲󱚴󱛎󱚹 󱚲󱚸 󱚰󱚺󱛎󱛃 󱚰󱚳 󱚾󱚲󱛍󱚺󱛂".split(/ /),
   CLEFT_CONSTRUCTIONS = "bï nä gö 󱚲󱚹 󱚵󱚺 󱛃󱛃".split(/ /),
   PARENTHETICALS = "kïo 󱛄󱚹󱛍󱛃".split(/ /),
   VOCATIVES = "hóı 󱛆󱛃󱛎󱚹".split(/ /),
-  EXOPHORIC_PRONOUNS = "jí súq nháo súna nhána úmo íme súho áma há 󱚾󱚹 󱚺󱚲󱛂 󱚽󱚺󱛎󱛃 󱚺󱚲󱚵󱚺 󱚽󱚺󱚵󱚺 󱚲󱚰󱛃 󱚹󱚰󱚴 󱚺󱚲󱛆󱛃 󱚺󱚰󱚺 󱛆󱚺".split(/ /),
+  EXOPHORIC_PRONOUNS = "jí súq nháo súna nhána úmo íme súho áma há 󱚾󱚹 󱚺󱚲󱛂 󱚽󱚺󱛎󱛃 󱚽󱚳 󱚺󱚲󱚵󱚺 󱚽󱚺󱚵󱚺 󱚲󱚰󱛃 󱚹󱚰󱚴 󱚺󱚲󱛆󱛃 󱚺󱚰󱚺 󱛆󱚺".split(/ /),
   ENDOPHORIC_PRONOUNS = "hó máq tá hóq áq chéq hóa 󱛆󱛃 󱚰󱚺󱛂 󱚷󱚺 󱛆󱛃󱛂 󱚺󱛂 󱚿󱚴󱛂 󱛆󱛃󱛍󱚺".split(/ /),
   PRONOUNS = [].concat(EXOPHORIC_PRONOUNS, ENDOPHORIC_PRONOUNS);
 
@@ -325,8 +335,13 @@ function onKaiInput(e) {
     } else if (deraniMode && lastKey === "n" && key === "h") {
       buf = buf.replace(/.$/u, "󱚽");
     } else if (deraniMode && vowels.includes(lastKey) && vowels.includes(key)) {
-      buf += ["ai", "ao", "ei", "oi"].includes(lastKey + key) ? "󱛎" : "󱛍";
-      buf += letter;
+      const falling = fallingDiphthongs.get(lastKey + key)
+      if (deraniMode === "reform" && falling) {
+        buf = buf.replace(/.$/u, falling);
+      } else {
+        buf += falling ? "󱛎" : "󱛍";
+        buf += letter;
+      }
     } else {
 
       buf += letter;
@@ -360,9 +375,13 @@ function onKaiKeydown(e) {
 renderKeyboard();
 
 function toggleDeraniMode() {
-  deraniMode = !deraniMode;
-  document.getElementById("derani-mode").checked = deraniMode;
+  deraniMode = deraniMode === "official" ? "reform" : deraniMode === "reform" ? "" : "official";
+  document.getElementById("derani-mode").value = deraniMode;
   renderKeyboard();
+}
+
+function setDeraniMode(element) {
+  console.log(element.value);
 }
 
 function clearTextbox() {

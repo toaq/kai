@@ -100,12 +100,14 @@
       margin-bottom: 0.5em;
     }
 
-    .actions > button {
+    .actions>button {
       padding: 4px 8px;
     }
 
     .hint {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5em;
     }
 
     .hint+.hint {
@@ -148,6 +150,12 @@
       background: #eee;
     }
 
+    .stack {
+      display: inline-flex;
+      flex-direction: column;
+      font-size: 80%;
+    }
+
     @media screen and (max-width: 600px) {
       .hints {
         font-size: 13px;
@@ -163,11 +171,14 @@
 <body>
   <main>
     <div class="soa">
-      <h1>kaı</h1>
+      <h1>󱛘󱛄󱚺󱛎󱚹󱛙</h1>
       <div class="hints">
         <div class="hint">
           <kbd>2 3 4</kbd>
-          <span>tones</span>
+          <div class="stack">
+            <span>tones</span>
+            <span>donelaı</span>
+          </div>
         </div>
         <div class="hint">
           <kbd>w0 i0 &lt;&lt;</kbd>
@@ -176,8 +187,12 @@
         <div class="hint">
           <kbd><span class="ctrl-plus">Ctrl+</span>/</kbd>
           <label for="derani-mode">
-            <input id="derani-mode" type="checkbox" onchange="toggleDeraniMode()" />
-            Derani mode
+            <select name="derani-mode" id="derani-mode" onchange="setDeraniMode(this)">
+              <option value="">Latına</option>
+              <option value="official">Deranı</option>
+              <option value="reform">Neıranı</option>
+            </select>
+            <a href="https://toaq.me/Derani_diphthong_reform">?</a>
           </label>
         </div>
       </div>
@@ -188,7 +203,7 @@
       <button onclick="clearTextbox()">Clear</button>
       <button onclick="copyTextbox()">Copy</button>
     </div>
-    <textarea id="kai" rows="20" autofocus placeholder="Kaı súq doa"></textarea>
+    <textarea id="kai" rows="20" autofocus placeholder="Kaı súq sá doa"></textarea>
   </main>
   <script src="./kaichuo.js"></script>
   <script>
