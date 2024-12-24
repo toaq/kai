@@ -165,6 +165,7 @@ function keyboardLabel(key) {
     case "CapsLock": return "Caps";
     case "Backspace": return "⌫";
     case "Control": return "Ctrl";
+    case "Unidentified": return "?";
     case "󱛘": return "󱛘󱛅";
     case "󱛙": return "󱛘󱛅󱛙";
     case " ": return "Space";
@@ -355,6 +356,12 @@ function onKaiInput(e) {
   localStorage.setItem('kai', kai.value);
   // document.getElementById('derani').innerText = deranı_from_latin_cs(buf.trim(), []);
   renderKeyboard();
+}
+
+function prettify() {
+  kai.selectionStart = 0;
+  kai.selectionEnd = kai.value.length;
+  onKaiInput({ data: kai.value.replace(/vy?|w|y/g, 'ꝡ').replace(/VY?|W|Y/g, 'Ꝡ') });
 }
 
 function onKaiKeydown(e) {
