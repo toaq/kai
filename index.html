@@ -15,10 +15,11 @@
   <title>kaı</title>
   <style>
     :root {
-      --peq: #f8f8fb;
-      --puim: #000000d0;
-      --boaq: #d8e8f8;
-      --cai: #197A92;
+      color-scheme: light dark;
+      --peq: light-dark(#f8f8fb, #444448);
+      --puim: light-dark(#000000d0, #e0e0e0);
+      --boaq: light-dark(#d8e8f8, #333336);
+      --cioq: light-dark(#d8e8f8, #446688);
     }
 
     * {
@@ -41,7 +42,8 @@
 
     h1 {
       text-align: center;
-      padding: 1rem;
+      padding-bottom: 1rem;
+      font-weight: normal;
     }
 
     summary {
@@ -81,15 +83,9 @@
 
     .soa kbd {
       font-family: Derani, 'Monaco', 'Consolas', 'DejaVu Sans Mono', monospace;
-      background: rgba(0, 0, 0, 0.1);
+      background: light-dark(rgba(0, 0, 0, 0.1), #444444);
       padding: 1px 4px;
       border-radius: 4px;
-    }
-
-    .soa samp {
-      font-family: inherit;
-      font-weight: bold;
-      color: var(--cai);
     }
 
     @font-face {
@@ -141,21 +137,21 @@
       justify-content: center;
       align-items: center;
       font-size: 16px;
-      background: var(--boaq);
+      background: var(--cioq);
       text-align: center;
       height: 32px;
     }
 
     .key-wide {
-      background: #f0d0e0;
+      background: light-dark(#f0d0e0, #884466);
     }
 
     .key-tone {
-      background: #f0d0e0;
+      background: light-dark(#f0d0e0, #884466);
     }
 
     .key-unlearned {
-      background: #eee;
+      background: light-dark(#eee, #666);
     }
 
     .stack {
@@ -179,7 +175,7 @@
 <body>
   <main>
     <div class="soa">
-      <h1>󱛘󱛄󱚺󱛎󱚹󱛙</h1>
+      <h1>Kaı</h1>
       <div class="hints">
         <div class="hint">
           <kbd>a2 a3 a4</kbd>
