@@ -289,6 +289,7 @@ const reLetter = /\p{L}|[\u{f16b0}-\u{f16cf}]/iu;
 function onKaiInput(e) {
   let ch, tone;
   const size = (e.data ?? "").length;
+  if (e.inputType === "insertFromPaste") return;
   if (/delete/.test(e.inputType)) lastKey = '';
   // document.getElementById("help-summary").innerText = `d:${e.data} c:${e.isComposing}`;
 
