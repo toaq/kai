@@ -289,6 +289,7 @@ const vowels = ["a", "e", "i", "o", "u"];
 const reLetter = /\p{L}|[\u{f16b0}-\u{f16cf}]/iu;
 
 function onKaiInput(e) {
+  if (e.isComposing) return;
   let ch, tone;
   const size = (e.data ?? "").length;
   if (e.inputType === "insertFromPaste") return;
@@ -298,7 +299,7 @@ function onKaiInput(e) {
   let buf = kai.value.substring(0, kai.selectionStart - size);
   const post = kai.value.substring(kai.selectionEnd);
 
-  for (const key of [...e.data ?? ""]) {
+  for (const key of [...(e.data ?? "").normalize('NFD')]) {
     const previous = lastCodepoint(buf) || "";
     const previousWasLetter = reLetter.test(previous);
     let letter = deraniMode ? deraniLayout.get(key.toLowerCase()) ?? key : key;
